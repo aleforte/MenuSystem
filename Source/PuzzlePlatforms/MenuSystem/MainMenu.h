@@ -19,7 +19,7 @@ protected:
 	virtual bool Initialize() override;
 
 private:
-	// Widgets
+	// Global Widgets
 	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* MenuSwitcher;
 
@@ -31,6 +31,12 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* AddressField;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ExitButton;
+
+	UFUNCTION()
+	void ExitGame();
 
 	// Main Menu Buttons
 	UPROPERTY(meta = (BindWidget))

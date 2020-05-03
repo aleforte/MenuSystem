@@ -6,6 +6,7 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
+#include "GameFramework/PlayerController.h"
 
 
 bool UMainMenu::Initialize()
@@ -13,12 +14,16 @@ bool UMainMenu::Initialize()
 	bool Success = Super::Initialize();
 	if (!Success) return false;
 
+	if (!ensure(ExitButton != nullptr)) return false;
 	if (!ensure(MMHostButton != nullptr)) return false;
 	if (!ensure(MMJoinButton != nullptr)) return false;
 	if (!ensure(JMJoinButton != nullptr)) return false;
 	if (!ensure(JMBackButton != nullptr)) return false;
+	
 
 	// =========== Register Delegates =============
+
+	ExitButton->OnClicked.AddDynamic(this, &UMainMenu::ExitGame);
 
 	// Main Menu Buttons
 	MMHostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
@@ -28,6 +33,17 @@ bool UMainMenu::Initialize()
 	JMBackButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 
 	return true;
+}
+
+void UMainMenu::ExitGame()
+{
+	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+	
+	PlayerController->ConsoleCommand("quit");
 }
 
 void UMainMenu::OpenJoinMenu()
