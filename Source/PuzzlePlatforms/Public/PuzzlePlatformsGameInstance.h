@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "PuzzlePlatforms/MainSystem/MenuInterface.h"
+#include "PuzzlePlatforms/MenuSystem/MenuInterface.h"
 #include "PuzzlePlatformsGameInstance.generated.h"
 
 /**
@@ -22,17 +22,28 @@ public:
 	/* Used by custom GameInstances to set up what they need */
 	virtual void Init() override;
 
-	UFUNCTION(Exec, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void LoadMenu();
 
-	UFUNCTION(Exec)
-	void Host();
+	UFUNCTION(BlueprintCallable)
+	void InGameLoadMenu();
 
 	UFUNCTION(Exec)
-	void Join(const FString& address);
+	virtual void Host() override;
+
+	UFUNCTION(Exec)
+	virtual void Join(const FString& address) override;
+
+	UFUNCTION(Exec)
+	virtual void LoadMainMenu() override;
+
+	UPROPERTY(BlueprintReadOnly)
+	class UInGameMenu* InGameMenu;
 
 private:
 	TSubclassOf<class UUserWidget> MenuClass;
+
+	TSubclassOf<class UUserWidget> InGameMenuClass;
 
 	class UMainMenu* Menu;
 };

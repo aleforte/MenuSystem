@@ -26,4 +26,6 @@ public:
 	virtual void Host() = 0; // "= 0" denotes pure virtual function
 
 	virtual void Join(const FString& address) = 0; // "= 0" denotes pure virtual function
+
+	virtual void LoadMainMenu() = 0;
 };
