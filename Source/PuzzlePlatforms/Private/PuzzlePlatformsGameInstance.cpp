@@ -7,6 +7,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "PlatformTrigger.h"
 #include "Blueprint/UserWidget.h"
+#include "PuzzlePlatforms/MainSystem/MainMenu.h"
 
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
@@ -28,21 +29,8 @@ void UPuzzlePlatformsGameInstance::Init()
 void UPuzzlePlatformsGameInstance::LoadMenu()
 {
 	if (MenuClass == nullptr) return;
-	UUserWidget* Menu = CreateWidget(this, MenuClass, FName("MainMenu")); // load menu
-	Menu->AddToViewport(); // attach to viewport
-	Menu->bIsFocusable = true;
-
-	// MS28 Setting input mode to interact with menu....
-
-	APlayerController* PlayerController = GetFirstLocalPlayerController();
-	if (PlayerController == nullptr) return;
-
-	FInputModeUIOnly InputMode;
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputMode.SetWidgetToFocus(Menu->TakeWidget());
-
-	PlayerController->SetInputMode(InputMode);
-	PlayerController->bShowMouseCursor = true;
+	Menu = CreateWidget<UMainMenu>(this, MenuClass, FName("MainMenu")); // load menu
+	Menu->SetMenuInterface(this); // Set this, since it now implements IMenuInterface
 }
 
 void UPuzzlePlatformsGameInstance::Host()
